@@ -1,0 +1,87 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class StudentGradeManagerWithGPA {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Map<String, Double> grades = new HashMap<>();
+        int totalCredits = 0;
+        double totalGradePoints = 0.0;
+
+        System.out.println("Welcome to the Student Grade Manager!");
+
+        String choice;
+        do {
+            System.out.println("\nEnter subject name (e.g., Math, Science): ");
+            String subject = scanner.nextLine();
+
+            System.out.println("Enter grade for " + subject + " (0 - 100): ");
+            double grade = scanner.nextDouble();
+
+            System.out.println("Enter credit hours for " + subject + ": ");
+            int creditHours = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline
+
+            grades.put(subject, grade);
+            totalCredits += creditHours;
+            totalGradePoints += gradeToPoint(grade) * creditHours;
+
+            System.out.println("Do you want to enter another subject? (yes/no)");
+            choice = scanner.nextLine().toLowerCase();
+        } while (choice.equals("yes"));
+
+        // Calculate the average grade
+        double totalGrades = 0;
+        for (double grade : grades.values()) {
+            totalGrades += grade;
+        }
+        double averageGrade = totalGrades / grades.size();
+
+        // Calculate the GPA
+        double gpa = totalGradePoints / totalCredits;
+
+        // Display the grades, average, and GPA
+        System.out.println("\nGrades Summary:");
+        for (Map.Entry<String, Double> entry : grades.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+        System.out.println("Average Grade: " + averageGrade);
+        System.out.println("GPA: " + gpa);
+
+        // Additional Information
+        if (averageGrade >= 90) {
+            System.out.println("Overall Grade: A");
+            System.out.println("Excellent performance!");
+        } else if (averageGrade >= 80) {
+            System.out.println("Overall Grade: B");
+            System.out.println("Good job!");
+        } else if (averageGrade >= 70) {
+            System.out.println("Overall Grade: C");
+            System.out.println("Fair performance.");
+        } else if (averageGrade >= 60) {
+            System.out.println("Overall Grade: D");
+            System.out.println("Needs improvement.");
+        } else {
+            System.out.println("Overall Grade: F");
+            System.out.println("Failing. Consider seeking help.");
+        }
+
+        scanner.close();
+    }
+
+    // Convert percentage grade to grade point (on a 4.0 scale)
+    public static double gradeToPoint(double grade) {
+        if (grade >= 90) {
+            return 4.0;
+        } else if (grade >= 80) {
+            return 3.0;
+        } else if (grade >= 70) {
+            return 2.0;
+        } else if (grade >= 60) {
+            return 1.0;
+        } else {
+            return 0.0;
+        }
+    }
+}
